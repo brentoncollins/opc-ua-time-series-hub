@@ -36,3 +36,4 @@ docker-compose up -d
 
 Have a look through the docker compose file to change the configuration for the OPC Server, 
 see the documentation at mcr.microsoft.com/iotedge/opc-plc to see the available configuration options.
+This is not secure, and should not be used in a production environment.

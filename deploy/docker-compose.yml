@@ -22,6 +22,7 @@ services:
     depends_on:
       - influxdb
       - opc-ua-time-series-hub-api
+      - opc-ua-time-series-hub-web
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
   opc-server:
@@ -77,6 +78,8 @@ services:
       TELEGRAF_COLLECT_CPU_TIME: "false"
       TELEGRAF_REPORT_ACTIVE: "false"
       TELEGRAF_CORE_TAGS: "false"
+    depends_on:
+      - opc-ua-time-series-hub-web
   db:
     image: mysql:8.0
     environment:
