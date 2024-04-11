@@ -22,8 +22,7 @@ Docker Compose are installed.
 
 ```bash
 git clone opc-ua-time-series-hub
-cd OPC-UA-Time-Series-Hub
-cd deploy
+cd opc-ua-time-series-hub/deploy
 docker-compose up -d
 ``` 
 
