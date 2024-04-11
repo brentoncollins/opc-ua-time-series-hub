@@ -21,7 +21,7 @@ To get started with the OPC UA Time Series Hub, clone this repository to your lo
 Docker Compose are installed.
 
 ```bash
-git clone opc-ua-time-series-hub
+git clone https://github.com/brentoncollins/opc-ua-time-series-hub.git
 cd opc-ua-time-series-hub/deploy
 docker-compose up -d
 ``` 
