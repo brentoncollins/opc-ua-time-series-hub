@@ -1,0 +1,92 @@
+version: '3.8'
+services:
+  influxdb:
+    image: influxdb:2
+    volumes:
+      - ./data:/var/lib/influxdb2
+      - ./config:/etc/influxdb2
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: "setup"
+      DOCKER_INFLUXDB_INIT_USERNAME: "root"
+      DOCKER_INFLUXDB_INIT_PASSWORD: "password"
+      DOCKER_INFLUXDB_INIT_ORG: "Home"
+      DOCKER_INFLUXDB_INIT_BUCKET: "OPCUA"
+      DOCKER_INFLUXDB_INIT_RETENTION: "1w"
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "opwfnj34y5189jfc03un0473523ntvuoqejirgft"
+  telegraf:
+    image: telegraf:latest
+    command: ["--watch-config", "/app/telegraf.conf"]
+    restart: always
+    depends_on:
+      - influxdb
+      - opc-ua-time-series-hub-api
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  opc-server:
+    image: mcr.microsoft.com/iotedge/opc-plc:latest
+    command: ["--cycletime", "1000",
+              "--eventrate","1000",
+              "--portnum", "50000",
+              "--autoaccept",
+              "--fastnodes", "500",
+              "--fastrate", "1",
+              "--fasttype", "double",
+              "--fasttyperandomization","True",
+              "--slownodes", "500",
+              "--slowrate", "10",
+              "--slowtype", "double",
+              "--slowtyperandomization","True",
+              "--guidnodes", "0",
+              "--unsecuretransport",
+              "--certdnsnames=opc-server"]
+    ports:
+      - "50000:50000"
+    hostname: opc-server
+  opc-ua-time-series-hub-api:
+    build: ../hub-api
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./telegraf.conf:/app/telegraf.conf
+    environment:
+      LOG_FILE_PATH: /app/app.log
+      DB_USER: "admin"
+      DB_PASSWORD: "admin"
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      DB_NAME: "opcua"
+      TELEGRAF_CONFIG_FILE: /app/telegraf.conf
+      TELEGRAF_INTERVAL: "10s"
+      TELEGRAF_ROUND_INTERVAL: "true"
+      TELEGRAF_METRIC_BATCH_SIZE: "1000"
+      TELEGRAF_METRIC_BUFFER_LIMIT: "10000"
+      TELEGRAF_COLLECTION_JITTER: "0s"
+      TELEGRAF_FLUSH_INTERVAL: "10s"
+      TELEGRAF_FLUSH_JITTER:  "0s"
+      TELEGRAF_PRECISION: "0s"
+      TELEGRAF_INFLUX_URL: "http://influxdb:8086"
+      TELEGRAF_INFLUX_TOKEN: "opwfnj34y5189jfc03un0473523ntvuoqejirgft"
+      TELEGRAF_INFLUX_ORG: "Home"
+      TELEGRAF_INFLUX_BUCKET: "OPCUA"
+      TELEGRAF_OPCUA_ENDPOINT: "opc.tcp://opc-server:50000/"
+      ROOT_NODE: "ns=3;s=OpcPlc"
+      TELEGRAF_PER_CPU: "true"
+      TELEGRAF_TOTAL_CPU: "true"
+      TELEGRAF_COLLECT_CPU_TIME: "false"
+      TELEGRAF_REPORT_ACTIVE: "false"
+      TELEGRAF_CORE_TAGS: "false"
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: opcua
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3307:3306"
+  opc-ua-time-series-hub-web:
+    build: ../hub-web
+    ports:
+      - "3000:3000"

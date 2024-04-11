@@ -1,0 +1,174 @@
+/* General Container Styles */
+.node-tree-container {
+	width: 75%;
+	padding: 8px;
+	margin: auto;
+	/* Centering the container */
+	border: 1px solid #ccc;
+}
+/* Node Item Styles */
+.node-item {
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px;
+	margin-bottom: 2px;
+	/* Spacing between rows */
+	border: 1px solid #ddd;
+	background-color: #f8f9fa;
+	/* Default background color */
+}
+/* For alternating row colors */
+.node-item:nth-child(odd) {
+	background-color: #e9ecef;
+}
+.node-item.alternate-row {
+	background-color: #f0f0f0;
+	/* Adjusted for clarity in alternating rows */
+}
+/* Text and DataType Styles */
+.node-text, .node-data-type {
+	text-align: left;
+	color: #666;
+	/* Subtle color for text */
+}
+.node-data-type {
+	margin-right: 30px;
+	/* Space between the DataType and checkbox */
+	font-size: 0.9em;
+	/* Slightly smaller font size for differentiation */
+}
+/* Checkbox and Toggle Button Styles */
+.history-checkbox {
+	position: absolute;
+	right: 8px;
+	/* Positioning to the right */
+	top: 50%;
+	transform: translateY(-50%);
+	/* Vertically center */
+	margin-left: auto;
+	/* Ensures alignment to the right */
+}
+.node-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.toggle-btn {
+	margin-right: 30px;
+	/* Ensures space between toggle and node name */
+	cursor: pointer;
+}
+.node-details {
+	display: flex;
+	align-items: center;
+}
+
+.error-message, .success-message, .update-telegraf-message {
+  color: black;
+  font-size: 12px;
+	margin: 10px 0;
+}
+
+.node-tree-container {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	/* Stretch children width to fit the container */
+	width: 75%;
+}
+.controls-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	/* Spacing between controls and the next section */
+}
+.search-box {
+	margin-right: 10px;
+	/* Adds some spacing between the search box and the button */
+}
+.update-config-button {
+	margin-left: auto;
+	/* Pushes the button to the right */
+}
+
+
+.error-message, .success-message {
+	text-align: center;
+}
+
+
+.response-message-container {
+  display: flex;
+  justify-content: space-between; /* Keeps items on each end */
+  align-items: center; /* Vertically centers the items */
+  padding: 0 10px; /* Optional padding for breathing room */
+  height: 50px; /* Ensures a consistent height */
+}
+
+.spacer {
+  flex: 1; /* Takes up space but is invisible */
+}
+
+.error-message, .success-message, .update-telegraf-message {
+  /* Styles for the message */
+  margin: 0; /* Adjust margins as needed */
+}
+
+.spacer {
+  flex: 1; /* Takes up space but is invisible */
+}
+
+.update-telegraf-message {
+  /* Additional styling for the "Require update" text */
+  /* No additional settings required for alignment */
+  font-size: 12px;
+}
+
+.modal-buttons {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.modal-button {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.ok-button {
+	background-color: #609862; /* Green */
+	color: white;
+}
+
+.cancel-button {
+	background-color: #c06c66; /* Red */
+	color: white;
+}
+
+.scrollable-table-container {
+	overflow-y: auto;
+	height: 85%;
+}
+
+.updates-required {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.updates-required th, .updates-required td {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+.updates-required th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #5c8ca7;
+	color: white;
+}
