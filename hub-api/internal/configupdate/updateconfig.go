@@ -3,10 +3,13 @@ package configupdate
 import (
 	"OpcUaTimeSeriesHub/hub-api/internal/database"
 	"bytes"
+	"fmt"
 	"github.com/BurntSushi/toml"
 	"log"
 	"os"
 	"strconv"
+	"strings"
+	"unicode"
 )
 
 type Config struct {
@@ -68,7 +71,7 @@ func ConvertToSimpleNodes(nodes []*database.Node) []*SimpleNode {
 	simpleNodes := make([]*SimpleNode, len(nodes))
 	for i, node := range nodes {
 		simpleNodes[i] = &SimpleNode{
-			Name:           node.BrowseName,
+			Name:           escapeString(node.BrowseName),
 			Namespace:      strconv.Itoa(node.Namespace),
 			IdentifierType: node.IdentifierType,
 			Identifier:     node.Identifier,
@@ -185,4 +188,41 @@ func atoi(s string) int {
 		return i
 	}
 	return 0
+}
+
+func escapeString(s string) string {
+
+	var sb strings.Builder
+	for _, c := range s {
+		switch c {
+		case '\b':
+			sb.WriteString("\\b")
+		case '\t':
+			sb.WriteString("\\t")
+		case '\n':
+			sb.WriteString("\\n")
+		case '\f':
+			sb.WriteString("\\f")
+		case '\r':
+			sb.WriteString("\\r")
+		case '"':
+			sb.WriteString("\\\"")
+		case '/':
+			sb.WriteString("\\/")
+		case '\\':
+			sb.WriteString("\\\\")
+		default:
+			if unicode.IsPrint(c) {
+				sb.WriteRune(c)
+			} else {
+				// Handle any other non-printable unicode characters
+				if c <= 0xFFFF {
+					sb.WriteString(fmt.Sprintf("\\u%04X", c))
+				} else {
+					sb.WriteString(fmt.Sprintf("\\U%08X", c))
+				}
+			}
+		}
+	}
+	return sb.String()
 }

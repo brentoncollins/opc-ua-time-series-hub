@@ -13,8 +13,6 @@ COPY go.mod go.sum ./
 # Download all the dependencies
 RUN go mod download
 
-# Copy the rest of the source code
-COPY .. ./
 
 # Build the Go app
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -o opc-ua-time-series-hub-api

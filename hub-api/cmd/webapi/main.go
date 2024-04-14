@@ -7,10 +7,9 @@ import (
 	"OpcUaTimeSeriesHub/hub-api/util"
 	"fmt"
 	"github.com/gorilla/mux"
-	"time"
-
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -29,18 +28,18 @@ func main() {
 		return
 	}
 	// Create a ticker that fires every 30 minutes
-	ticker := time.NewTicker(30 * time.Minute)
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				err := database.UpdateHierarchy()
-				if err != nil {
-					log.Fatalf("Failed to update hierarchy: %v", err)
-				}
-			}
-		}
-	}()
+	//ticker := time.NewTicker(30 * time.Minute)
+	//go func() {
+	//	for {
+	//		select {
+	//		case <-ticker.C:
+	//			err := database.UpdateHierarchy()
+	//			if err != nil {
+	//				log.Fatalf("Failed to update hierarchy: %v", err)
+	//			}
+	//		}
+	//	}
+	//}()
 
 	// Register the handlers
 	r.HandleFunc("/api/nodes", webapi.GetNodesHandler).Methods("GET")
